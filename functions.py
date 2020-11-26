@@ -49,6 +49,8 @@ def scr_remove():
         print('No screens started.')
 
 def vd_remove():
+    if os.path.exists(tmp_file):
+        os.remove(tmp_file)
     if get_vd():
         v = get_vd()
         os.kill(int(v),9)
@@ -66,10 +68,6 @@ def java_remove():
 def pic_remove():
     shutil.rmtree(dirpath)
     os.mkdir(dirpath)
-    if os.path.exists(tmp_file):
-        os.remove(tmp_file)
-    else:
-        pass
     print('Pictures folder removed and readded.')
 
 def ent_remove():
@@ -104,15 +102,18 @@ def get_status():
     ent = entangle_status()
     return ent
 
+def run_vd():
+    return subprocess.call('Xvfb :99 &', shell=True)
+
 def run_entangle():
-    return subprocess.call('screen -dmS Entangle bash -c "sh /etc/razpad/entangle.sh"', shell=True)
+    return subprocess.call('screen -dmS Entangle bash -c "entangle --display :99"', shell=True)
 
 def pictures():
-    subprocess.call('screen -dmS Pictures bash -c "java -jar /etc/razpad/pictures.jar /home/mercari/Pictures/Capture/ X"', shell=True)
-    print('Pictures java program started!!!')
+    print('Starting Pictures script.')
+    return subprocess.call('screen -dmS Pictures bash -c "java -jar /etc/razpad/pictures.jar /home/mercari/Pictures/Capture/ X"', shell=True)
 
 def labelPrint():
     subprocess.call('screen -dmS Printer bash -c "java -jar /etc/razpad/print.jar "'+ get_ip() +'""', shell=True)
-    print('Printer java program Started for IP: '+ get_ip() +'!!!')
+    print('Printer java script started for IP: '+ get_ip() +'!!!')
 
 
